@@ -40,4 +40,11 @@ class Meal {
   final bool isLactoseFree;
   final bool isVegan;
   final bool isVegetarian;
+
+  String get durationToString {
+    final d = Duration(minutes: duration);
+    List<String> parts = d.toString().split(':');
+
+    return "${parts[0] != '0' ? ('${parts[0]} h') : ''} ${parts[1] != '00' ? ('${parts[1]} min') : ''}";
+  }
 }

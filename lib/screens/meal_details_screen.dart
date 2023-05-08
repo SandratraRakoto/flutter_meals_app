@@ -40,20 +40,32 @@ class MealDetailsScreen extends ConsumerWidget {
                       ? 'Meal added as favorite.'
                       : 'Meal is no longer favorite.');
             },
-            icon: isFavorite
-                ? const Icon(Icons.star)
-                : const Icon(Icons.star_border_outlined),
+            icon: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) => RotationTransition(
+                  turns: Tween<double>(begin: 0.8, end: 1).animate(
+                    CurvedAnimation(parent: animation, curve: Curves.ease),
+                  ),
+                  child: child),
+              child: Icon(
+                isFavorite ? Icons.star : Icons.star_border_outlined,
+                key: ValueKey(isFavorite),
+              ),
+            ),
           )
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Image.network(
-              meal.imageUrl,
-              width: double.infinity,
-              height: 300,
-              fit: BoxFit.cover,
+            Hero(
+              tag: meal.id,
+              child: Image.network(
+                meal.imageUrl,
+                width: double.infinity,
+                height: 300,
+                fit: BoxFit.cover,
+              ),
             ),
             const SizedBox(height: 16),
             Text(
@@ -61,7 +73,7 @@ class MealDetailsScreen extends ConsumerWidget {
               style: Theme.of(context)
                   .textTheme
                   .titleLarge!
-                  .copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  .copyWith(color: Theme.of(context).colorScheme.primary),
             ),
             const SizedBox(height: 16),
             for (final ingredient in meal.ingredients)
@@ -76,13 +88,12 @@ class MealDetailsScreen extends ConsumerWidget {
               style: Theme.of(context)
                   .textTheme
                   .titleLarge!
-                  .copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  .copyWith(color: Theme.of(context).colorScheme.primary),
             ),
             const SizedBox(height: 16),
             for (final step in meal.steps)
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   step,
                   textAlign: TextAlign.center,
@@ -90,6 +101,7 @@ class MealDetailsScreen extends ConsumerWidget {
                       color: Theme.of(context).colorScheme.onBackground),
                 ),
               ),
+            const SizedBox(height: 16)
           ],
         ),
       ),
